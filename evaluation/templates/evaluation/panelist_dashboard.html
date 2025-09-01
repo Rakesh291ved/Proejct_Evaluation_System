@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panelist Dashboard</title>
+    <style>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                background-color: #E8D8F2; /* Light lavender */
+                color: #2E0F47; /* Dark purple for text */
+            }
+            h1, h2, h3 {
+                color: #5A397A;
+            }
+            h1 {
+                text-align: center;
+            }
+            .team-box {
+                border: 1px solid #A88FBF; /* Lavender border */
+                border-radius: 5px;
+                padding: 15px;
+                margin-bottom: 15px;
+                background-color: #E8D8F2; /* White for contrast */
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+        .team-box a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .team-box a:hover {
+            text-decoration: underline;
+        }
+        form {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background-color:#A88FBF;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            margin-top: 5px;
+            margin-bottom: 15px;
+            padding: 8px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        button[type="submit"] {
+            background-color: #5A397A; /* Dark purple */
+            color: #E8D8F2; /* Light lavender */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #2E0F47; /* Deep purple */
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Panelist Dashboard</h1>
+
+    <!-- List of Teams with Uploaded Files -->
+    <h2>Teams and Uploaded Files</h2>
+    {% for team in teams %}
+        <div class="team-box">
+            <h3>{{ team.name }}</h3>
+            <p><strong>Guide:</strong> {{ team.guide_name|default:"Not Assigned" }}</p>
+
+            <!-- GitHub Repo Link -->
+            {% if team.github_repo %}
+                <p><strong>GitHub Repo:</strong> <a href="{{ team.github_repo }}" target="_blank">View Repository</a></p>
+            {% else %}
+                <p><strong>GitHub Repo:</strong> Not Uploaded</p>
+            {% endif %}
+
+            <!-- Phase 1 File -->
+            <p><strong>Phase 1 File:</strong> 
+                {% if team.phase1_file %}
+                    <a href="{{ team.phase1_file.url }}" download>Download</a>
+                {% else %}
+                    Not Uploaded
+                {% endif %}
+            </p>
+
+            <!-- Phase 2 File -->
+            <p><strong>Phase 2 File:</strong> 
+                {% if team.phase2_file %}
+                    <a href="{{ team.phase2_file.url }}" download>Download</a>
+                {% else %}
+                    Not Uploaded
+                {% endif %}
+            </p>
+
+            <!-- Phase 3 File -->
+            <p><strong>Phase 3 File:</strong> 
+                {% if team.phase3_file %}
+                    <a href="{{ team.phase3_file.url }}" download>Download</a>
+                {% else %}
+                    Not Uploaded
+                {% endif %}
+            </p>
+        </div>
+    {% endfor %}
+
+    <!-- Evaluation Form -->
+    <h2>Evaluate a Team</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Panelist Name -->
+
+        <!-- Select Team -->
+
+        <!-- Select Phase -->
+
+        <!-- Rubrics -->
+
+        <h3>Evaluation Rubrics</h3>
+        <label for="team_id">Select Team:</label>
+        <select name="team_id" id="team_id" required>
+            {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.name }}</option>
+            {% endfor %}
+        </select>
+
+
+        <!-- Render each field in the form within a table row -->
+        <tr>
+            <td style="padding: 5px, width=5px;"colspan="2">Panelist Name</td>
+            <td style="padding: 10px;">{{ form.panelist_name }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px"></td>
+            <td style="padding: 10px;">{{ form.phase }}</td>
+  <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
+        </tr>
+            <tr>
+                <th style="padding: 10px; background-color: #f2f2f2;">Criteria</th>
+                <th style="padding: 10px; background-color: #f2f2f2;">Max Marks</th>
+                <th style="padding: 10px; background-color: #f2f2f2;"> Marks</th>
+    
+            </tr>
+        
+        <tr>
+            <td style="padding: 10px;">Abstract/Synopsis</td>
+            <td style ="text-align:center">10</td>
+            <td style="padding: 10px;">{{ form.abstract_synopsis }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Topic Relevance</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.topic_relevance }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Problem Identification</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.problem_identification }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Objectives and Methodology</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.objectives_methodology }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Literature Survey</td>
+            <td style ="text-align:center">10</td>
+            <td style="padding: 10px;">{{ form.literature_survey }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Documentation</td>
+            <td style ="text-align:center">10</td>
+            <td style="padding: 10px;">{{ form.documentation }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Results(with inference,conclusion)</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.results }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Presentation Quality</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.presentation_quality }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Communication Skills</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.communication_skills }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Technical Knowledge</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.technical_knowledge }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Individual Involvement</td>
+            <td style ="text-align:center">10</td>
+            <td style="padding: 10px;">{{ form.individual_involvement }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Fundamentals and Questions</td>
+            <td style ="text-align:center">10</td>
+            <td style="padding: 10px;">{{ form.fundamentals_questions }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Clarity in Answers</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.clarity_in_answers }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Understanding Ability</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.understanding_ability }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">Attitude Towards Questions</td>
+            <td style ="text-align:center">5</td>
+            <td style="padding: 10px;">{{ form.attitude_towards_questions }}</td>
+        </tr>
+    
+</table>
+
+
+        <!-- Submit Evaluation -->
+        <button type="submit">Submit Evaluation</button>
+    </form>
+</body>
+</html>
